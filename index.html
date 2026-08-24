@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIVARA — Luxury Lifestyle & 4K Media Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#0f0f0f;--secondary:#1a1a1a;--tertiary:#252525;
+            --accent:#c9a96e;--accent-light:#dfc08a;--accent-dark:#a8884f;
+            --accent-glow:rgba(201,169,110,.12);--accent-glow-strong:rgba(201,169,110,.25);
+            --cream:#faf7f2;--warm:#f5f0e8;--ivory:#fefcf8;
+            --text:#2a2a2a;--text-light:#6b6b6b;--text-lighter:#999;--text-muted:#bbb;
+            --border:#e8e2d8;--border-light:#f0ebe3;
+            --glass:rgba(255,255,255,.72);--glass-dark:rgba(15,15,15,.88);
+            --glass-border:rgba(255,255,255,.18);--glass-border-dark:rgba(255,255,255,.08);
+            --shadow-xs:0 1px 3px rgba(0,0,0,.03);--shadow-sm:0 2px 10px rgba(0,0,0,.04);
+            --shadow-md:0 8px 30px rgba(0,0,0,.06);--shadow-lg:0 20px 60px rgba(0,0,0,.1);
+            --shadow-xl:0 40px 80px rgba(0,0,0,.14);--shadow-glow:0 0 40px rgba(201,169,110,.15);
+            --radius-xs:6px;--radius-sm:10px;--radius-md:16px;--radius-lg:24px;--radius-xl:32px;--radius-2xl:40px;
+            --ease:cubic-bezier(.25,.46,.45,.94);--ease-bounce:cubic-bezier(.34,1.56,.64,1);--ease-smooth:cubic-bezier(.4,0,.2,1);
+            --transition:.4s var(--ease);--transition-fast:.25s var(--ease);--transition-slow:.7s var(--ease);
+        }
+        html{scroll-behavior:smooth;font-size:16px}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--text);background:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+        ::selection{background:var(--accent-glow-strong);color:var(--primary)}
+        img{display:block;max-width:100%}
+        a{color:inherit;text-decoration:none}
+
+        /* === CUSTOM CURSOR === */
+        .custom-cursor{position:fixed;top:0;left:0;z-index:999999;pointer-events:none;mix-blend-mode:difference}
+        .cursor-dot{width:8px;height:8px;background:#fff;border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+        .cursor-ring{width:40px;height:40px;border:1.5px solid rgba(255,255,255,.5);border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+        .cursor-hover .cursor-dot{width:16px;height:16px;background:var(--accent)}
+        .cursor-hover .cursor-ring{width:60px;height:60px;border-color:var(--accent)}
+        .cursor-text{position:absolute;transform:translate(-50%,-50%);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .3s;white-space:nowrap}
+        .cursor-view .cursor-text{opacity:1}
+        .cursor-view .cursor-ring{width:80px;height:80px}
+
+        /* === PRELOADER === */
+        .preloader{position:fixed;inset:0;background:var(--primary);z-index:1000000;display:flex;align-items:center;justify-content:center;flex-direction:column}
+        .preloader-inner{text-align:center}
+        .preloader-logo{font-family:'Playfair Display',serif;font-size:52px;color:#fff;letter-spacing:12px;font-weight:700;margin-bottom:40px;overflow:hidden}
+        .preloader-logo span{color:var(--accent)}
+        .preloader-logo .char{display:inline-block;transform:translateY(100%);animation:charReveal .6s var(--ease) forwards}
+        .preloader-progress{width:280px;height:1px;background:rgba(255,255,255,.06);position:relative;margin:0 auto 20px}
+        .preloader-progress-bar{height:100%;background:var(--accent);width:0%;transition:width .1s}
+        .preloader-percent{font-size:13px;color:rgba(255,255,255,.3);letter-spacing:6px;font-weight:300;font-family:'Inter'}
+        .preloader-tagline{font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(255,255,255,.2);font-style:italic;margin-top:30px;letter-spacing:2px}
+        .preloader.loaded{animation:preloaderOut .8s .3s var(--ease) forwards}
+        @keyframes preloaderOut{0%{clip-path:inset(0)}100%{clip-path:inset(0 0 100% 0)}}
+        @keyframes charReveal{to{transform:translateY(0)}}
+
+        /* === DOWNLOAD PROGRESS TOAST === */
+        .dl-toast{position:fixed;top:28px;right:28px;z-index:1000005;background:var(--glass-dark);backdrop-filter:blur(24px);border:1px solid var(--glass-border-dark);border-radius:var(--radius-md);padding:18px 24px;min-width:320px;box-shadow:var(--shadow-xl);transform:translateY(-120%);opacity:0;transition:all .5s var(--ease-bounce)}
+        .dl-toast.active{transform:translateY(0);opacity:1}
+        .dl-toast-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+        .dl-toast-title{font-size:13px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}
+        .dl-toast-percent{font-size:11px;color:var(--accent-light);font-weight:700}
+        .dl-toast-bar{width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin-bottom:6px}
+        .dl-toast-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-light));width:0%;transition:width .15s}
+        .dl-toast-status{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.5px}
+
+        /* === READING PROGRESS === */
+        .reading-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent-dark),var(--accent),var(--accent-light));z-index:100002;width:0%;box-shadow:0 0 10px var(--accent-glow-strong)}
+
+        /* === NAVIGATION === */
+        .nav{position:fixed;top:0;width:100%;z-index:100000;padding:20px 50px;display:flex;justify-content:space-between;align-items:center;transition:all var(--transition)}
+        .nav.scrolled{background:var(--glass);backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);padding:14px 50px;border-bottom:1px solid var(--glass-border)}
+        .nav-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:5px;transition:var(--transition)}
+        .nav-logo span{color:var(--accent)}
+        .nav-links{display:flex;gap:32px;list-style:none}
+        .nav-links a{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;position:relative;padding:6px 0;transition:color var(--transition-fast)}
+        .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--accent);transition:width var(--transition)}
+        .nav-links a:hover{color:var(--accent)}
+        .nav-links a:hover::after{width:100%}
+        .nav-actions{display:flex;align-items:center;gap:12px}
+        .nav-icon{width:38px;height:38px;border:1px solid var(--border);border-radius:50%;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all var(--transition-fast);color:var(--text)}
+        .nav-icon:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:scale(1.05)}
+        .nav-cta{padding:10px 24px;background:var(--primary);color:#fff;border:none;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all var(--transition);font-family:'Inter'}
+        .nav-cta:hover{background:var(--accent);box-shadow:var(--shadow-glow)}
+        .nav-hamburger{display:none;flex-direction:column;cursor:pointer;gap:5px;z-index:100001;padding:5px}
+        .nav-hamburger span{width:22px;height:1.5px;background:var(--text);transition:all .35s var(--ease);transform-origin:center}
+        .nav-hamburger.active span:nth-child(1){transform:rotate(45deg) translate(4px,5px)}
+        .nav-hamburger.active span:nth-child(2){opacity:0;transform:scaleX(0)}
+        .nav-hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(4px,-5px)}
+
+        /* Mobile Menu */
+        .mobile-nav{position:fixed;inset:0;background:var(--primary);z-index:99999;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;opacity:0;visibility:hidden;transition:all .5s}
+        .mobile-nav.active{opacity:1;visibility:visible}
+        .mobile-nav a{font-family:'Playfair Display',serif;font-size:36px;color:#fff;padding:10px 0;transform:translateY(30px);opacity:0;transition:all .4s}
+        .mobile-nav.active a{transform:translateY(0);opacity:1}
+        .mobile-nav.active a:nth-child(1){transition-delay:.05s}
+        .mobile-nav.active a:nth-child(2){transition-delay:.1s}
+        .mobile-nav.active a:nth-child(3){transition-delay:.15s}
+        .mobile-nav.active a:nth-child(4){transition-delay:.2s}
+        .mobile-nav.active a:nth-child(5){transition-delay:.25s}
+        .mobile-nav.active a:nth-child(6){transition-delay:.3s}
+        .mobile-nav.active a:nth-child(7){transition-delay:.35s}
+        .mobile-nav a:hover{color:var(--accent)}
+
+        /* === MUSIC PLAYER === */
+        .music-dock{position:fixed;bottom:24px;left:24px;z-index:99998;display:flex;align-items:center;gap:10px;background:var(--glass-dark);backdrop-filter:blur(24px);border:1px solid var(--glass-border-dark);border-radius:50px;padding:6px 16px 6px 6px;box-shadow:var(--shadow-lg);transition:all var(--transition)}
+        .music-dock:hover{transform:translateY(-3px);box-shadow:var(--shadow-xl)}
+        .music-btn{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .3s;flex-shrink:0}
+        .music-btn.playing{animation:mPulse 2s infinite}
+        @keyframes mPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,.4)}50%{box-shadow:0 0 0 12px rgba(201,169,110,0)}}
+        .music-meta{display:flex;flex-direction:column;min-width:0}
+        .music-name{font-size:11px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+        .music-sub{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.5px}
+        .music-eq{display:flex;align-items:flex-end;gap:2px;height:16px;margin-left:6px}
+        .music-eq span{width:2.5px;background:var(--accent);border-radius:1px}
+        .music-eq.on span{animation:eqBar .5s ease-in-out infinite alternate}
+        .music-eq span:nth-child(1){height:4px;animation-delay:0s}
+        .music-eq span:nth-child(2){height:10px;animation-delay:.08s}
+        .music-eq span:nth-child(3){height:6px;animation-delay:.16s}
+        .music-eq span:nth-child(4){height:14px;animation-delay:.24s}
+        .music-eq span:nth-child(5){height:8px;animation-delay:.12s}
+        @keyframes eqBar{0%{height:3px}100%{height:16px}}
+
+        /* === 3D VIDEO HERO === */
+        .hero{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;perspective:1200px}
+        .hero-video-wrap{position:absolute;inset:0;z-index:0}
+        .hero-video-wrap video{width:100%;height:100%;object-fit:cover;filter:brightness(.65)}
+        .hero-gradient{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,rgba(15,15,15,.85) 0%,rgba(15,15,15,.5) 35%,rgba(15,15,15,.25) 60%,rgba(15,15,15,.4) 100%)}
+        .hero-grain{position:absolute;inset:0;z-index:2;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");pointer-events:none}
+
+        #heroCanvas{position:absolute;inset:0;z-index:3;pointer-events:none}
+
+        .hero-inner{position:relative;z-index:4;display:grid;grid-template-columns:1fr 1fr;align-items:center;min-height:100vh;padding:0 80px}
+        .hero-text{max-width:620px}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.2);border-radius:50px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent-light);margin-bottom:28px;backdrop-filter:blur(10px);opacity:0;animation:heroFade .8s 2s forwards}
+        .hero-badge .badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:badgePulse 2s infinite}
+        @keyframes badgePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+        .hero-title{font-family:'Playfair Display',serif;font-size:clamp(40px,5.5vw,80px);line-height:1.05;color:#fff;font-weight:700;margin-bottom:24px;opacity:0;animation:heroFade .8s 2.2s forwards}
+        .hero-title em{font-style:italic;color:var(--accent-light);font-family:'Cormorant Garamond',serif;font-weight:300}
+        .hero-subtitle{font-size:17px;line-height:1.9;color:rgba(255,255,255,.55);max-width:480px;margin-bottom:44px;font-weight:300;opacity:0;animation:heroFade .8s 2.4s forwards}
+        .hero-buttons{display:flex;gap:14px;align-items:center;flex-wrap:wrap;opacity:0;animation:heroFade .8s 2.6s forwards}
+        .btn-main{display:inline-flex;align-items:center;gap:10px;padding:16px 38px;background:#fff;color:var(--primary);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border-radius:50px;transition:all var(--transition);border:2px solid #fff}
+        .btn-main:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+        .btn-video{display:inline-flex;align-items:center;gap:12px;padding:14px 28px;background:transparent;color:#fff;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;border:1.5px solid rgba(255,255,255,.2);border-radius:50px;cursor:pointer;transition:all var(--transition)}
+        .btn-video:hover{border-color:var(--accent);background:rgba(201,169,110,.1)}
+        .btn-video-circle{width:34px;height:34px;border:1.5px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--accent);transition:all .3s}
+        .btn-video:hover .btn-video-circle{background:var(--accent);color:#fff}
+
+        /* 3D Hero Right */
+        .hero-3d{position:relative;display:flex;align-items:center;justify-content:center;height:100%;perspective:1000px}
+        .hero-3d-object{position:relative;width:400px;height:500px;transform-style:preserve-3d;animation:heroFloat 8s ease-in-out infinite}
+        @keyframes heroFloat{0%,100%{transform:translateY(0) rotateY(0) rotateX(0)}25%{transform:translateY(-20px) rotateY(5deg) rotateX(3deg)}50%{transform:translateY(-10px) rotateY(-3deg) rotateX(-2deg)}75%{transform:translateY(-25px) rotateY(4deg) rotateX(2deg)}}
+        .hero-3d-card{position:absolute;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-xl);transition:all .6s var(--ease)}
+        .hero-3d-card img{width:100%;height:100%;object-fit:cover}
+        .hero-3d-card-1{width:320px;height:420px;top:20px;left:40px;z-index:3;transform:translateZ(60px) rotateY(-5deg)}
+        .hero-3d-card-2{width:200px;height:260px;top:0;right:0;z-index:2;transform:translateZ(30px) rotateY(8deg);opacity:.85}
+        .hero-3d-card-3{width:180px;height:220px;bottom:0;left:0;z-index:1;transform:translateZ(0px) rotateY(-3deg);opacity:.7}
+        .hero-3d-glass{position:absolute;bottom:30px;right:20px;z-index:4;background:var(--glass-dark);backdrop-filter:blur(20px);border:1px solid var(--glass-border-dark);border-radius:var(--radius-md);padding:18px 22px;display:flex;align-items:center;gap:14px;transform:translateZ(80px);opacity:0;animation:heroFade .8s 3s forwards}
+        .hero-3d-glass img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--accent-glow-strong)}
+        .hero-3d-glass-text h5{font-size:13px;color:#fff;font-weight:600;margin-bottom:2px}
+        .hero-3d-glass-text p{font-size:11px;color:rgba(255,255,255,.4)}
+
+        .hero-scroll-indicator{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:12px;opacity:0;animation:heroFade .8s 3.2s forwards}
+        .scroll-mouse{width:22px;height:36px;border:1.5px solid rgba(255,255,255,.2);border-radius:11px;display:flex;justify-content:center;padding-top:7px}
+        .scroll-wheel{width:2.5px;height:7px;background:var(--accent);border-radius:2px;animation:scrollAnim 2s infinite}
+        @keyframes scrollAnim{0%{transform:translateY(0);opacity:1}100%{transform:translateY(8px);opacity:0}}
+        .hero-scroll-indicator span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);font-weight:500}
+        @keyframes heroFade{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+
+        /* Hero Stats Bar */
+        .hero-stats-bar{position:absolute;bottom:0;left:0;right:0;z-index:5;background:rgba(255,255,255,.04);backdrop-filter:blur(30px);border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-around;padding:18px 80px}
+        .hero-stat{text-align:center;opacity:0;animation:heroFade .6s forwards}
+        .hero-stat:nth-child(1){animation-delay:2.8s}
+        .hero-stat:nth-child(2){animation-delay:2.9s}
+        .hero-stat:nth-child(3){animation-delay:3s}
+        .hero-stat:nth-child(4){animation-delay:3.1s}
+        .hero-stat-num{font-family:'Playfair Display',serif;font-size:26px;color:var(--accent-light);font-weight:600}
+        .hero-stat-label{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+
+        /* === MARQUEE === */
+        .marquee{background:var(--primary);padding:13px 0;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.04)}
+        .marquee-track{display:flex;animation:marquee 40s linear infinite;width:max-content}
+        .marquee-item{display:flex;align-items:center;gap:10px;padding:0 36px;white-space:nowrap;color:rgba(255,255,255,.35);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:500}
+        .marquee-dot{width:3px;height:3px;background:var(--accent);border-radius:50%}
+        @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+        /* === SECTIONS === */
+        section{padding:120px 80px;position:relative}
+        .sec-label{display:inline-flex;align-items:center;gap:10px;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px}
+        .sec-label::before{content:'';width:28px;height:1px;background:var(--accent)}
+        .sec-title{font-family:'Playfair Display',serif;font-size:clamp(30px,3.8vw,50px);line-height:1.12;margin-bottom:16px;color:var(--primary)}
+        .sec-title em{font-style:italic;font-family:'Cormorant Garamond',serif;color:var(--accent);font-weight:400}
+        .sec-desc{font-size:15px;color:var(--text-light);max-width:520px;line-height:1.85;font-weight:300}
+        .sec-head{margin-bottom:60px}
+        .sec-head-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:60px;flex-wrap:wrap;gap:20px}
+        .link-arrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--accent);transition:gap var(--transition)}
+        .link-arrow:hover{gap:14px}
+
+        /* Reveal */
+        .reveal{opacity:0;transform:translateY(40px);transition:all .9s var(--ease)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .rd1{transition-delay:.05s}.rd2{transition-delay:.1s}.rd3{transition-delay:.15s}.rd4{transition-delay:.2s}
+
+        /* === 3D IMMERSIVE CATEGORIES === */
+        .categories-section{background:#fff;overflow:hidden}
+        .cat-3d-scene{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;perspective:1200px}
+        .cat-3d-card{position:relative;height:450px;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transform-style:preserve-3d;transition:transform .2s ease-out,box-shadow .4s}
+        .cat-3d-card:hover{box-shadow:0 40px 80px rgba(0,0,0,.2)}
+        .cat-3d-card img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+        .cat-3d-card:hover img{transform:scale(1.1)}
+        .cat-3d-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.05) 55%,transparent);display:flex;flex-direction:column;justify-content:flex-end;padding:30px;transform:translateZ(40px)}
+        .cat-3d-num{font-family:'Playfair Display',serif;font-size:72px;color:rgba(255,255,255,.06);position:absolute;top:20px;right:24px;font-weight:800;transform:translateZ(60px)}
+        .cat-3d-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:8px;font-weight:600}
+        .cat-3d-overlay h3{font-family:'Playfair Display',serif;font-size:28px;color:#fff;margin-bottom:8px}
+        .cat-3d-overlay p{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+        .cat-3d-card:hover .cat-3d-overlay p{max-height:100px}
+        .cat-3d-cta{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--accent-light);opacity:0;transform:translateY(10px);transition:all .4s}
+        .cat-3d-card:hover .cat-3d-cta{opacity:1;transform:translateY(0)}
+
+        /* === 3D VIDEO CINEMA === */
+        .cinema{background:var(--primary);color:#fff;overflow:hidden;perspective:1200px}
+        .cinema .sec-label{color:var(--accent-light)}.cinema .sec-label::before{background:var(--accent-light)}
+        .cinema .sec-title{color:#fff}.cinema .sec-desc{color:rgba(255,255,255,.4)}
+        .cinema-grid{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:360px 360px;gap:16px;transform-style:preserve-3d}
+        .cinema-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transition:transform .5s var(--ease)}
+        .cinema-card:hover{transform:translateZ(30px) scale(1.01)}
+        .cinema-card:first-child{grid-row:1/3}
+        .cinema-card video,.cinema-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+        .cinema-card:hover video,.cinema-card:hover img{transform:scale(1.04)}
+        .cinema-card-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.1) 45%,transparent);display:flex;flex-direction:column;justify-content:flex-end;padding:28px}
+        .cinema-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:68px;background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;transition:all var(--transition);cursor:pointer}
+        .cinema-play:hover{background:var(--accent);border-color:var(--accent);transform:translate(-50%,-50%) scale(1.1)}
+        .cinema-badge{position:absolute;top:14px;left:14px;background:var(--accent);color:#fff;padding:4px 12px;border-radius:50px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+        
+        /* Direct Download Icon Button on Cards */
+        .cinema-download-btn{position:absolute;top:14px;right:14px;width:38px;height:38px;background:rgba(15,15,15,.65);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;transition:all var(--transition);cursor:pointer;z-index:10}
+        .cinema-download-btn:hover{background:var(--accent);border-color:var(--accent);transform:scale(1.15);box-shadow:0 0 15px rgba(201,169,110,.5)}
+
+        .cinema-card-overlay h3{font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:6px}
+        .cinema-card-overlay .meta{font-size:11px;color:rgba(255,255,255,.5);display:flex;gap:12px}
+
+        /* === 4K VIDEO VAULT (DOWNLOAD CENTER) === */
+        .vault-section{background:var(--secondary);color:#fff;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+        .vault-section .sec-label{color:var(--accent-light)}.vault-section .sec-label::before{background:var(--accent-light)}
+        .vault-section .sec-title{color:#fff}.vault-section .sec-desc{color:rgba(255,255,255,.4)}
+        .vault-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+        .vault-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-lg);overflow:hidden;transition:all var(--transition);display:flex;flex-direction:column}
+        .vault-card:hover{border-color:rgba(201,169,110,.3);transform:translateY(-6px);box-shadow:var(--shadow-xl)}
+        .vault-thumb{height:200px;position:relative;overflow:hidden}
+        .vault-thumb video{width:100%;height:100%;object-fit:cover}
+        .vault-res{position:absolute;bottom:12px;left:12px;background:rgba(15,15,15,.7);backdrop-filter:blur(8px);padding:4px 10px;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--accent-light);border:1px solid rgba(255,255,255,.1)}
+        .vault-content{padding:24px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+        .vault-content h4{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:8px}
+        .vault-content p{font-size:12px;color:rgba(255,255,255,.45);line-height:1.6;margin-bottom:20px}
+        .vault-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.3);padding-top:14px;border-top:1px solid rgba(255,255,255,.06)}
+        .vault-btn-group{display:flex;gap:8px;margin-top:16px}
+        .btn-dl{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;background:var(--accent);color:#fff;border:none;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all var(--transition);font-family:'Inter'}
+        .btn-dl:hover{background:var(--accent-light);transform:translateY(-2px);box-shadow:0 0 20px rgba(201,169,110,.4)}
+        .btn-dl-sub{padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:50px;color:rgba(255,255,255,.6);font-size:10px;font-weight:600;cursor:pointer;transition:all var(--transition)}
+        .btn-dl-sub:hover{background:rgba(255,255,255,.15);color:#fff}
+
+        /* VIDEO LIGHTBOX */
+        .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.94);backdrop-filter:blur(12px);z-index:1000001;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;opacity:0;visibility:hidden;transition:all .4s}
+        .lightbox.active{opacity:1;visibility:visible}
+        .lightbox-player{width:85%;max-width:1100px;aspect-ratio:16/9;border-radius:var(--radius-md);overflow:hidden;background:#000;transform:scale(.92);transition:transform .5s var(--ease-bounce);position:relative}
+        .lightbox.active .lightbox-player{transform:scale(1)}
+        .lightbox-player video{width:100%;height:100%}
+        .lightbox-close{position:absolute;top:28px;right:28px;width:48px;height:48px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition)}
+        .lightbox-close:hover{background:var(--accent);border-color:var(--accent)}
+        
+        .lightbox-controls-bar{display:flex;align-items:center;justify-content:space-between;width:85%;max-width:1100px}
+        .lightbox-info{color:#fff;text-align:left}
+        .lightbox-info h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:4px}
+        .lightbox-info p{font-size:13px;color:rgba(255,255,255,.4)}
+        .lightbox-download-action{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:var(--accent);color:#fff;border:none;border-radius:50px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all var(--transition);font-family:'Inter'}
+        .lightbox-download-action:hover{background:var(--accent-light);transform:translateY(-2px);box-shadow:0 0 25px rgba(201,169,110,.5)}
+
+        /* === 3D PRODUCT VIEWER === */
+        .product-3d{background:var(--cream);overflow:hidden}
+        .product-3d-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+        .product-viewer{position:relative;aspect-ratio:1;max-width:550px;margin:0 auto;perspective:1000px}
+        .product-turntable{width:100%;height:100%;transform-style:preserve-3d;cursor:grab;position:relative}
+        .product-turntable:active{cursor:grabbing}
+        .product-turntable-img{width:100%;height:100%;border-radius:var(--radius-2xl);overflow:hidden;transform-style:preserve-3d;box-shadow:var(--shadow-xl);transition:transform .1s}
+        .product-turntable-img img{width:100%;height:100%;object-fit:cover}
+        .product-hotspot{position:absolute;width:28px;height:28px;background:var(--accent);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px rgba(201,169,110,.2);animation:hotspotPulse 2s infinite;z-index:2;transition:transform .3s}
+        .product-hotspot:hover{transform:scale(1.3)}
+        .product-hotspot::after{content:'+';color:#fff;font-size:14px;font-weight:700}
+        @keyframes hotspotPulse{0%,100%{box-shadow:0 0 0 4px rgba(201,169,110,.2)}50%{box-shadow:0 0 0 12px rgba(201,169,110,.1)}}
+        .product-hotspot-1{top:25%;left:30%}
+        .product-hotspot-2{top:55%;right:20%}
+        .product-hotspot-3{bottom:20%;left:45%}
+        .product-tooltip{position:absolute;background:var(--glass-dark);backdrop-filter:blur(20px);border:1px solid var(--glass-border-dark);border-radius:var(--radius-md);padding:16px 20px;color:#fff;min-width:200px;opacity:0;visibility:hidden;transition:all .3s;pointer-events:none;z-index:3}
+        .product-hotspot:hover .product-tooltip{opacity:1;visibility:visible;transform:translateY(-8px)}
+        .product-tooltip h5{font-size:13px;font-weight:600;margin-bottom:4px}
+        .product-tooltip p{font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}
+        .product-info .sec-label{margin-bottom:20px}
+        .product-info h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,42px);line-height:1.2;margin-bottom:16px}
+        .product-info h2 em{font-style:italic;font-family:'Cormorant Garamond',serif;color:var(--accent);font-weight:400}
+        .product-info>p{font-size:16px;line-height:1.85;color:var(--text-light);margin-bottom:28px;font-weight:300}
+        .product-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+        .product-feature{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border-light)}
+        .product-feature-icon{font-size:20px}
+        .product-feature span{font-size:13px;font-weight:500}
+        .product-rotate-hint{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-lighter);letter-spacing:1px;text-transform:uppercase;margin-top:16px}
+        .product-rotate-hint .rotate-icon{animation:rotateHint 3s infinite}
+        @keyframes rotateHint{0%,100%{transform:rotate(0)}50%{transform:rotate(360deg)}}
+
+        /* === ARTICLES === */
+        .articles-section{background:#fff}
+        .articles-tabs{display:flex;gap:6px;margin-bottom:50px;flex-wrap:wrap}
+        .a-tab{padding:9px 22px;border:1.5px solid var(--border);border-radius:50px;background:transparent;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Inter';transition:all var(--transition);color:var(--text-lighter)}
+        .a-tab.active,.a-tab:hover{background:var(--primary);border-color:var(--primary);color:#fff}
+        .articles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+        .a-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--cream);transition:all var(--transition);cursor:pointer;transform-style:preserve-3d}
+        .a-card:hover{transform:translateY(-10px);box-shadow:var(--shadow-lg)}
+        .a-card-img{height:250px;overflow:hidden;position:relative}
+        .a-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+        .a-card:hover .a-card-img img{transform:scale(1.08)}
+        .a-card-label{position:absolute;top:14px;left:14px;background:#fff;padding:4px 12px;border-radius:50px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent)}
+        .a-card-body{padding:24px}
+        .a-card-date{font-size:11px;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px}
+        .a-card-body h3{font-family:'Playfair Display',serif;font-size:19px;line-height:1.35;margin-bottom:10px;transition:color var(--transition)}
+        .a-card:hover .a-card-body h3{color:var(--accent)}
+        .a-card-body p{font-size:13px;line-height:1.7;color:var(--text-light);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-weight:300}
+        .a-card-foot{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-top:1px solid var(--border-light)}
+        .a-card-author{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500}
+        .a-card-author img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+        .a-card-foot .time{font-size:11px;color:var(--text-muted)}
+
+        /* === PODCAST & SOUND === */
+        .sound-section{background:linear-gradient(150deg,#0f0f0f,#1a1a1a,#0f0f0f);color:#fff;position:relative;overflow:hidden}
+        .sound-section::before{content:'';position:absolute;top:-30%;right:-15%;width:700px;height:700px;background:radial-gradient(circle,rgba(201,169,110,.06),transparent 70%);border-radius:50%}
+        .sound-section .sec-label{color:var(--accent-light);justify-content:center}.sound-section .sec-label::before{background:var(--accent-light)}
+        .sound-section .sec-title{color:#fff;text-align:center}.sound-section .sec-desc{color:rgba(255,255,255,.4);text-align:center;margin:0 auto 60px}
+        .sound-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;position:relative;z-index:1}
+
+        /* Featured Podcast */
+        .podcast-main{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-xl);overflow:hidden;transition:all var(--transition)}
+        .podcast-main:hover{border-color:rgba(255,255,255,.1);transform:translateY(-4px)}
+        .podcast-cover{height:260px;overflow:hidden;position:relative}
+        .podcast-cover img{width:100%;height:100%;object-fit:cover}
+        .podcast-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.5),transparent)}
+        .podcast-new{position:absolute;top:14px;right:14px;background:#e74c3c;color:#fff;padding:4px 12px;border-radius:50px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+        .podcast-new::before{content:'';width:5px;height:5px;background:#fff;border-radius:50%;animation:liveDot 1s infinite}
+        @keyframes liveDot{0%,100%{opacity:1}50%{opacity:.2}}
+        .podcast-content{padding:24px}
+        .podcast-content h3{font-family:'Playfair Display',serif;font-size:21px;margin-bottom:8px}
+        .podcast-content>p{font-size:13px;color:rgba(255,255,255,.4);line-height:1.7;margin-bottom:18px}
+
+        /* Audio Player */
+        .player{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px}
+        .player-btn{width:42px;height:42px;background:var(--accent);border-radius:50%;border:none;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+        .player-btn:hover{transform:scale(1.08);background:var(--accent-light)}
+        .player-info{flex:1;min-width:0}
+        .player-title{font-size:12px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .player-bar{width:100%;height:3px;background:rgba(255,255,255,.08);border-radius:2px;cursor:pointer;position:relative;overflow:hidden}
+        .player-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-light));border-radius:2px;width:0%;transition:width .1s}
+        .player-time{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:rgba(255,255,255,.3)}
+        .player-dur{font-size:11px;color:rgba(255,255,255,.25);white-space:nowrap;margin-left:10px}
+
+        /* Soundscape Grid */
+        .soundscapes-wrap{margin-top:36px}
+        .soundscapes-wrap h4{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:18px;text-align:center;color:var(--accent-light)}
+        .snd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+        .snd-btn{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-md);padding:18px 14px;text-align:center;cursor:pointer;transition:all var(--transition)}
+        .snd-btn:hover,.snd-btn.active{background:rgba(201,169,110,.08);border-color:var(--accent);transform:translateY(-4px)}
+        .snd-btn .snd-icon{font-size:28px;margin-bottom:8px;display:block}
+        .snd-btn .snd-name{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:1px;text-transform:uppercase;font-weight:500}
+
+        /* Podcast List */
+        .pod-list{display:flex;flex-direction:column;gap:14px}
+        .pod-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:var(--radius-md);padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all var(--transition)}
+        .pod-item:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);transform:translateX(6px)}
+        .pod-item-cover{width:56px;height:56px;border-radius:10px;overflow:hidden;flex-shrink:0}
+        .pod-item-cover img{width:100%;height:100%;object-fit:cover}
+        .pod-item-info{flex:1;min-width:0}
+        .pod-item-info h4{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .pod-item-info p{font-size:11px;color:rgba(255,255,255,.35)}
+        .pod-item-time{font-size:10px;color:var(--accent);letter-spacing:1px;white-space:nowrap}
+        .pod-item-play{width:34px;height:34px;background:rgba(255,255,255,.08);border-radius:50%;border:none;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+        .pod-item-play:hover{background:var(--accent)}
+
+        /* === 3D FLIP WELLNESS === */
+        .wellness-section{background:var(--cream);perspective:1200px}
+        .well-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+        .well-flip{height:340px;cursor:pointer;perspective:1000px}
+        .well-flip-inner{width:100%;height:100%;transition:transform .8s var(--ease);transform-style:preserve-3d;position:relative}
+        .well-flip:hover .well-flip-inner{transform:rotateY(180deg)}
+        .well-f,.well-b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius-lg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
+        .well-f{background:#fff;border:1px solid var(--border-light)}
+        .well-f::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-light));border-radius:var(--radius-lg) var(--radius-lg) 0 0;transform:scaleX(0);transition:transform var(--transition);transform-origin:left}
+        .well-flip:hover .well-f::before{transform:scaleX(1)}
+        .well-icon{width:68px;height:68px;background:var(--accent-glow);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:18px}
+        .well-f h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:8px}
+        .well-f p{font-size:13px;line-height:1.7;color:var(--text-light);font-weight:300}
+        .well-hint{font-size:9px;color:var(--text-muted);margin-top:14px;letter-spacing:1.5px;text-transform:uppercase}
+        .well-b{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;transform:rotateY(180deg)}
+        .well-b h3{font-family:'Playfair Display',serif;font-size:19px;margin-bottom:10px;color:var(--accent-light)}
+        .well-b p{font-size:13px;line-height:1.7;color:rgba(255,255,255,.5);margin-bottom:16px;font-weight:300}
+        .well-b-num{font-family:'Playfair Display',serif;font-size:38px;color:var(--accent-light)}
+        .well-b-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:6px}
+
+        /* === AMBIENT EXPERIENCE === */
+        .ambient{background:linear-gradient(180deg,#080808,#121212);padding:100px 80px;text-align:center;position:relative;overflow:hidden}
+        .ambient::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(201,169,110,.04) 0%,transparent 65%)}
+
+        #ambientCanvas{position:absolute;inset:0;z-index:0}
+
+        .ambient-vis{width:260px;height:260px;margin:0 auto 36px;position:relative;display:flex;align-items:center;justify-content:center;z-index:1}
+        .amb-ring{position:absolute;border-radius:50%;border:1px solid rgba(201,169,110,.1);animation:ambPulse 5s ease-in-out infinite}
+        .amb-ring:nth-child(1){width:100%;height:100%;animation-delay:0s}
+        .amb-ring:nth-child(2){width:72%;height:72%;animation-delay:.6s}
+        .amb-ring:nth-child(3){width:48%;height:48%;animation-delay:1.2s}
+        .amb-ring:nth-child(4){width:28%;height:28%;animation-delay:1.8s}
+        @keyframes ambPulse{0%,100%{transform:scale(1);opacity:.2}50%{transform:scale(1.2);opacity:.5}}
+        .amb-btn{width:74px;height:74px;background:var(--accent);border-radius:50%;border:none;color:#fff;font-size:24px;cursor:pointer;position:relative;z-index:2;transition:all .3s;box-shadow:0 0 40px rgba(201,169,110,.25)}
+        .amb-btn:hover{transform:scale(1.1);box-shadow:0 0 60px rgba(201,169,110,.4)}
+        .amb-btn.on{animation:ambBtnPulse 2s infinite}
+        @keyframes ambBtnPulse{0%,100%{box-shadow:0 0 30px rgba(201,169,110,.2)}50%{box-shadow:0 0 70px rgba(201,169,110,.5)}}
+        .amb-title{font-family:'Cormorant Garamond',serif;font-size:34px;color:#fff;margin-bottom:10px;font-style:italic;position:relative;z-index:1}
+        .amb-desc{font-size:14px;color:rgba(255,255,255,.3);max-width:480px;margin:0 auto 28px;line-height:1.7;position:relative;z-index:1}
+        .amb-moods{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+        .amb-mood{padding:9px 20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:50px;color:rgba(255,255,255,.4);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all var(--transition);font-family:'Inter'}
+        .amb-mood:hover,.amb-mood.active{background:rgba(201,169,110,.1);border-color:var(--accent);color:var(--accent-light)}
+
+        /* === 3D TRAVEL GLOBE SECTION === */
+        .globe-section{background:#fff;overflow:hidden}
+        .globe-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+        .globe-container{width:100%;aspect-ratio:1;max-width:500px;margin:0 auto;position:relative;perspective:1000px}
+        #globeCanvas{width:100%;height:100%;border-radius:50%}
+        .globe-pin{position:absolute;width:12px;height:12px;background:var(--accent);border-radius:50%;box-shadow:0 0 10px rgba(201,169,110,.5);cursor:pointer;transition:all .3s;z-index:2}
+        .globe-pin:hover{transform:scale(1.5)}
+        .globe-pin::after{content:'';position:absolute;inset:-4px;border:2px solid rgba(201,169,110,.3);border-radius:50%;animation:pinPulse 2s infinite}
+        @keyframes pinPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.5);opacity:0}}
+        .globe-destinations{display:flex;flex-direction:column;gap:20px}
+        .globe-dest{display:flex;align-items:center;gap:16px;padding:20px;background:var(--cream);border-radius:var(--radius-md);cursor:pointer;transition:all var(--transition);border:1px solid transparent}
+        .globe-dest:hover{background:#fff;border-color:var(--accent);transform:translateX(8px);box-shadow:var(--shadow-md)}
+        .globe-dest-img{width:70px;height:70px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0}
+        .globe-dest-img img{width:100%;height:100%;object-fit:cover}
+        .globe-dest-info h4{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:4px}
+        .globe-dest-info p{font-size:12px;color:var(--text-light);line-height:1.5}
+        .globe-dest-info .dest-meta{display:flex;gap:12px;margin-top:6px;font-size:11px;color:var(--text-lighter)}
+
+        /* === 3D ROTATING CUBE QUOTE === */
+        .quote{background:linear-gradient(135deg,#1a1a1a,#0f0f0f);padding:120px 80px;text-align:center;position:relative;overflow:hidden;perspective:1000px}
+        .quote::before{content:'';position:absolute;top:-40%;right:-20%;width:500px;height:500px;background:radial-gradient(circle,var(--accent-glow),transparent 65%);border-radius:50%}
+        .quote .sec-label{color:var(--accent-light);justify-content:center}.quote .sec-label::before{background:var(--accent-light)}
+        .cube-wrap{width:200px;height:200px;margin:30px auto;perspective:800px}
+        .cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:cubeRot 30s linear infinite}
+        @keyframes cubeRot{0%{transform:rotateX(0) rotateY(0)}100%{transform:rotateX(360deg) rotateY(360deg)}}
+        .cube-f{position:absolute;width:200px;height:200px;display:flex;align-items:center;justify-content:center;font-size:44px;border:1px solid rgba(201,169,110,.1);background:rgba(201,169,110,.02);backdrop-filter:blur(3px);border-radius:var(--radius-md)}
+        .cube-f.fr{transform:translateZ(100px)}.cube-f.bk{transform:rotateY(180deg) translateZ(100px)}
+        .cube-f.rt{transform:rotateY(90deg) translateZ(100px)}.cube-f.lt{transform:rotateY(-90deg) translateZ(100px)}
+        .cube-f.tp{transform:rotateX(90deg) translateZ(100px)}.cube-f.bt{transform:rotateX(-90deg) translateZ(100px)}
+        .quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,34px);color:#fff;line-height:1.5;max-width:700px;margin:0 auto 16px;font-style:italic;position:relative;z-index:1}
+        .quote-author{font-size:12px;color:var(--accent-light);letter-spacing:3px;text-transform:uppercase;font-weight:600;position:relative;z-index:1}
+
+        /* === RECIPES === */
+        .recipes-section{background:var(--cream)}
+        .rec-scroll{display:flex;gap:24px;overflow-x:auto;padding:10px 0 30px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+        .rec-scroll::-webkit-scrollbar{height:2px}.rec-scroll::-webkit-scrollbar-thumb{background:var(--accent);border-radius:1px}
+        .rec-card{min-width:320px;background:#fff;border-radius:var(--radius-lg);overflow:hidden;scroll-snap-align:start;transition:all var(--transition);cursor:pointer;flex-shrink:0}
+        .rec-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
+        .rec-card-img{height:230px;overflow:hidden;position:relative}
+        .rec-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+        .rec-card:hover .rec-card-img img{transform:scale(1.08)}
+        .rec-card-time{position:absolute;bottom:10px;right:10px;background:var(--glass);backdrop-filter:blur(10px);padding:5px 12px;border-radius:50px;font-size:11px;font-weight:600;color:var(--primary)}
+        .rec-body{padding:22px}
+        .rec-tags{display:flex;gap:5px;margin-bottom:10px}
+        .rec-tags span{padding:3px 9px;background:var(--accent-glow);border-radius:50px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent)}
+        .rec-body h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px;line-height:1.3}
+        .rec-body p{font-size:12px;color:var(--text-light);line-height:1.6;font-weight:300}
+        .rec-foot{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-top:1px solid var(--border-light)}
+        .rec-foot span{font-size:11px;color:var(--text-muted)}
+        .rec-save{width:30px;height:30px;border:1px solid var(--border);border-radius:50%;background:transparent;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .3s}
+        .rec-save:hover,.rec-save.saved{background:#e74c3c;border-color:#e74c3c;color:#fff}
+
+        /* === NEWSLETTER === */
+        .news-section{background:var(--warm);text-align:center}
+        .news-box{max-width:520px;margin:0 auto}
+        .news-form{display:flex;gap:10px;margin-top:32px}
+        .news-form input{flex:1;padding:16px 26px;border:1.5px solid var(--border);border-radius:50px;font-size:14px;font-family:'Inter';background:#fff;transition:all var(--transition);outline:0}
+        .news-form input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-glow)}
+        .news-form button{padding:16px 32px;background:var(--primary);color:#fff;border:none;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all var(--transition);font-family:'Inter';white-space:nowrap}
+        .news-form button:hover{background:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+        .news-note{margin-top:14px;font-size:11px;color:var(--text-muted)}
+        .news-ok{display:none;margin-top:18px;padding:14px 22px;background:#d4edda;color:#155724;border-radius:50px;font-size:13px}
+
+        /* === INSTAGRAM === */
+        .insta-section{background:#fff;padding-bottom:0}
+        .insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-top:50px}
+        .insta-item{aspect-ratio:1;overflow:hidden;position:relative;cursor:pointer}
+        .insta-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+        .insta-item:hover img{transform:scale(1.1)}
+        .insta-over{position:absolute;inset:0;background:rgba(15,15,15,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--transition);color:#fff;font-size:12px;font-weight:600;letter-spacing:1px}
+        .insta-item:hover .insta-over{opacity:1}
+
+        /* === FOOTER === */
+        footer{background:var(--primary);color:#fff;padding:80px 80px 36px}
+        .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:60px;padding-bottom:60px;border-bottom:1px solid rgba(255,255,255,.06)}
+        .foot-brand .nav-logo{color:#fff;display:inline-block;margin-bottom:16px;font-size:22px}
+        .foot-brand p{color:rgba(255,255,255,.3);font-size:13px;line-height:1.8;margin-bottom:22px;max-width:280px;font-weight:300}
+        .socials{display:flex;gap:8px}
+        .socials a{width:38px;height:38px;border:1px solid rgba(255,255,255,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);font-size:13px;transition:all var(--transition)}
+        .socials a:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-2px)}
+        .foot-col h4{font-family:'Playfair Display',serif;font-size:16px;margin-bottom:22px;font-weight:600}
+        .foot-col a{display:block;color:rgba(255,255,255,.3);font-size:13px;margin-bottom:12px;transition:all var(--transition);font-weight:300}
+        .foot-col a:hover{color:var(--accent-light);transform:translateX(4px)}
+        .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;flex-wrap:wrap;gap:12px}
+        .foot-bottom p{color:rgba(255,255,255,.2);font-size:12px}
+        .foot-links a{color:rgba(255,255,255,.2);font-size:12px;margin-left:20px;transition:color var(--transition)}
+        .foot-links a:hover{color:var(--accent-light)}
+
+        .btt{position:fixed;bottom:24px;right:24px;width:46px;height:46px;background:var(--primary);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transform:translateY(10px);transition:all var(--transition);z-index:99998;box-shadow:var(--shadow-md)}
+        .btt.show{opacity:1;visibility:visible;transform:translateY(0)}
+        .btt:hover{background:var(--accent);transform:translateY(-3px)}
+
+        /* === RESPONSIVE === */
+        @media(max-width:1100px){
+            section{padding:80px 40px}.nav{padding:16px 30px}.nav.scrolled{padding:12px 30px}
+            .hero-inner{grid-template-columns:1fr;padding:0 40px}.hero-3d{display:none}
+            .hero-stats-bar{padding:14px 40px}
+            .cat-3d-scene{grid-template-columns:repeat(2,1fr)}
+            .cinema-grid{grid-template-columns:1fr;grid-template-rows:auto}.cinema-card:first-child{grid-row:auto}
+            .vault-grid{grid-template-columns:repeat(2,1fr)}
+            .product-3d-grid{grid-template-columns:1fr;gap:40px}
+            .articles-grid{grid-template-columns:repeat(2,1fr)}
+            .well-grid{grid-template-columns:repeat(2,1fr)}
+            .sound-grid{grid-template-columns:1fr}
+            .globe-layout{grid-template-columns:1fr;gap:40px}
+            .globe-container{max-width:350px}
+            .foot-top{grid-template-columns:1fr 1fr}
+            .insta-grid{grid-template-columns:repeat(3,1fr)}
+        }
+        @media(max-width:768px){
+            section{padding:60px 20px}.nav-links,.nav-cta{display:none}.nav-hamburger{display:flex}
+            .hero-inner{padding:0 20px}.hero-title{font-size:36px}.hero-stats-bar{flex-wrap:wrap;padding:12px 20px;gap:8px}
+            .hero-buttons{flex-direction:column;align-items:flex-start}
+            .cat-3d-scene,.articles-grid,.well-grid,.vault-grid{grid-template-columns:1fr}
+            .cat-3d-card{height:280px}
+            .snd-grid{grid-template-columns:repeat(2,1fr)}
+            .globe-container{max-width:280px}
+            .news-form{flex-direction:column}
+            .insta-grid{grid-template-columns:repeat(2,1fr)}
+            .foot-top{grid-template-columns:1fr;gap:36px}
+            footer{padding:60px 20px 28px}
+            .foot-bottom{flex-direction:column;text-align:center}
+            .foot-links a{margin:0 10px}
+            .music-dock{left:8px;bottom:8px;padding:5px 12px 5px 5px}
+            .music-meta{display:none}
+            .ambient{padding:60px 20px}
+            .quote{padding:60px 20px}
+            .custom-cursor{display:none}
+            .lightbox-controls-bar{flex-direction:column;gap:15px;align-items:flex-start}
+            .dl-toast{top:12px;right:12px;left:12px;min-width:auto}
+        }
+    </style>
+</head>
+<body>
+
+<!-- Download Toast Notification -->
+<div class="dl-toast" id="dlToast">
+    <div class="dl-toast-header">
+        <div class="dl-toast-title"><span>⬇️</span> <span id="dlToastName">Video Stream</span></div>
+        <div class="dl-toast-percent" id="dlToastPct">0%</div>
+    </div>
+    <div class="dl-toast-bar"><div class="dl-toast-fill" id="dlToastFill"></div></div>
+    <div class="dl-toast-status" id="dlToastStatus">Downloading high-definition asset...</div>
+</div>
+
+<!-- Custom Cursor -->
+<div class="custom-cursor" id="cursor">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+    <div class="cursor-text">View</div>
+</div>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-logo"><span class="char" style="animation-delay:.1s">V</span><span class="char" style="animation-delay:.15s">I</span><span class="char" style="animation-delay:.2s">V</span><span class="char" style="animation-delay:.25s">A</span><span class="char" style="animation-delay:.3s">R</span><span class="char" style="animation-delay:.35s">A</span><span style="color:var(--accent)" class="char" style="animation-delay:.4s">.</span></div>
+        <div class="preloader-progress"><div class="preloader-progress-bar" id="preloaderBar"></div></div>
+        <div class="preloader-percent" id="preloaderPct">0%</div>
+        <div class="preloader-tagline">Crafting your immersive experience</div>
+    </div>
+</div>
+
+<div class="reading-bar" id="readBar"></div>
+
+<!-- Audio -->
+<audio id="bgAudio" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2024/11/28/audio_3a6a28e498.mp3" type="audio/mpeg"></audio>
+<audio id="ambAudio" loop preload="none"><source src="https://cdn.pixabay.com/audio/2022/02/23/audio_ea70ad08e3.mp3" type="audio/mpeg"></audio>
+
+<!-- Music Dock -->
+<div class="music-dock" id="musicDock">
+    <button class="music-btn" id="musicBtn">▶</button>
+    <div class="music-meta"><div class="music-name">Ambient Serenity</div><div class="music-sub">Background · Lo-fi</div></div>
+    <div class="music-eq" id="musicEq"><span></span><span></span><span></span><span></span><span></span></div>
+</div>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+    <a href="#" class="nav-logo">VIVARA<span>.</span></a>
+    <ul class="nav-links">
+        <li><a href="#categories">Explore</a></li>
+        <li><a href="#cinema">Watch</a></li>
+        <li><a href="#vault">Download Vault</a></li>
+        <li><a href="#articles">Stories</a></li>
+        <li><a href="#sound">Listen</a></li>
+        <li><a href="#wellness">Wellness</a></li>
+        <li><a href="#globe">Travel</a></li>
+    </ul>
+    <div class="nav-actions">
+        <button class="nav-icon" title="Search">🔍</button>
+        <button class="nav-icon" onclick="triggerDownload('hero')" title="Download Hero Video">⬇️</button>
+        <button class="nav-cta" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Subscribe</button>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+    <a href="#categories" onclick="closeNav()">Explore</a>
+    <a href="#cinema" onclick="closeNav()">Watch</a>
+    <a href="#vault" onclick="closeNav()">Download Vault</a>
+    <a href="#articles" onclick="closeNav()">Stories</a>
+    <a href="#sound" onclick="closeNav()">Listen</a>
+    <a href="#wellness" onclick="closeNav()">Wellness</a>
+    <a href="#globe" onclick="closeNav()">Travel</a>
+    <a href="#newsletter" onclick="closeNav()">Subscribe</a>
+</div>
+
+<!-- 3D Video Hero -->
+<section class="hero">
+    <div class="hero-video-wrap">
+        <video id="heroVideo" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1920&h=1080&fit=crop">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-meditating-in-nature-31908-large.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="hero-gradient"></div>
+    <div class="hero-grain"></div>
+    <canvas id="heroCanvas"></canvas>
+
+    <div class="hero-inner">
+        <div class="hero-text">
+            <div class="hero-badge"><span class="badge-dot"></span> 4K Media Experience</div>
+            <h1 class="hero-title">Experience life in full <em>color</em></h1>
+            <p class="hero-subtitle">Cinematic stories, ambient soundscapes, and curated guides. Stream in real-time or download high-definition original cuts directly to your device.</p>
+            <div class="hero-buttons">
+                <a href="#cinema" class="btn-main">Watch Stories →</a>
+                <button class="btn-video" onclick="openLB('hero')"><span class="btn-video-circle">▶</span> Play Film</button>
+                <button class="btn-video" onclick="triggerDownload('hero')"><span class="btn-video-circle">⬇️</span> Download 4K Clip</button>
+            </div>
+        </div>
+        <div class="hero-3d">
+            <div class="hero-3d-object" id="hero3dObj">
+                <div class="hero-3d-card hero-3d-card-1"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=650&fit=crop" alt=""></div>
+                <div class="hero-3d-card hero-3d-card-2"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=400&fit=crop" alt=""></div>
+                <div class="hero-3d-card hero-3d-card-3"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=280&h=340&fit=crop" alt=""></div>
+            </div>
+            <div class="hero-3d-glass">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="">
+                <div class="hero-3d-glass-text"><h5>Master 4K Download</h5><p>Direct MP4 · Free License</p></div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-indicator"><div class="scroll-mouse"><div class="scroll-wheel"></div></div><span>Scroll to explore</span></div>
+    <div class="hero-stats-bar">
+        <div class="hero-stat"><div class="hero-stat-num" data-target="127">0</div><div class="hero-stat-label">Stories</div></div>
+        <div class="hero-stat"><div class="hero-stat-num" data-target="48">0</div><div class="hero-stat-label">Films</div></div>
+        <div class="hero-stat"><div class="hero-stat-num" data-target="250">0</div><div class="hero-stat-label">Recipes</div></div>
+        <div class="hero-stat"><div class="hero-stat-num" data-target="85">0</div><div class="hero-stat-label">Destinations</div></div>
+    </div>
+</section>
+
+<div class="marquee"><div class="marquee-track">
+    <div class="marquee-item"><span class="marquee-dot"></span>Instant 4K Video Downloads</div><div class="marquee-item"><span class="marquee-dot"></span>Royalty Free Clips</div><div class="marquee-item"><span class="marquee-dot"></span>Cinematic Films</div><div class="marquee-item"><span class="marquee-dot"></span>Ambient Sound</div><div class="marquee-item"><span class="marquee-dot"></span>3D Engine</div><div class="marquee-item"><span class="marquee-dot"></span>Slow Living</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Instant 4K Video Downloads</div><div class="marquee-item"><span class="marquee-dot"></span>Royalty Free Clips</div><div class="marquee-item"><span class="marquee-dot"></span>Cinematic Films</div><div class="marquee-item"><span class="marquee-dot"></span>Ambient Sound</div><div class="marquee-item"><span class="marquee-dot"></span>3D Engine</div><div class="marquee-item"><span class="marquee-dot"></span>Slow Living</div>
+</div></div>
+
+<!-- 3D Categories -->
+<section class="categories-section" id="categories">
+    <div class="sec-head reveal"><div class="sec-label">Explore</div><h2 class="sec-title">Curated for <em>you</em></h2><p class="sec-desc">Immersive 3D categories — hover to interact with depth and perspective.</p></div>
+    <div class="cat-3d-scene">
+        <div class="cat-3d-card tilt reveal rd1"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=900&fit=crop" alt=""><div class="cat-3d-num">01</div><div class="cat-3d-overlay"><div class="cat-3d-tag">42 Stories · 12 Films</div><h3>Wellness</h3><p>Mind, body & soul practices for modern living</p><a class="cat-3d-cta">Explore →</a></div></div>
+        <div class="cat-3d-card tilt reveal rd2"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=900&fit=crop" alt=""><div class="cat-3d-num">02</div><div class="cat-3d-overlay"><div class="cat-3d-tag">38 Stories · 8 Films</div><h3>Style</h3><p>Timeless fashion & conscious self-expression</p><a class="cat-3d-cta">Explore →</a></div></div>
+        <div class="cat-3d-card tilt reveal rd3"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=900&fit=crop" alt=""><div class="cat-3d-num">03</div><div class="cat-3d-overlay"><div class="cat-3d-tag">56 Stories · 15 Films</div><h3>Nutrition</h3><p>Nourish your body from the inside out</p><a class="cat-3d-cta">Explore →</a></div></div>
+        <div class="cat-3d-card tilt reveal rd4"><img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=900&fit=crop" alt=""><div class="cat-3d-num">04</div><div class="cat-3d-overlay"><div class="cat-3d-tag">31 Stories · 10 Films</div><h3>Travel</h3><p>Wander with intention and purpose</p><a class="cat-3d-cta">Explore →</a></div></div>
+    </div>
+</section>
+
+<!-- Video Cinema -->
+<section class="cinema" id="cinema">
+    <div class="sec-head-row reveal"><div><div class="sec-label">Watch & Save</div><h2 class="sec-title">Visual <em>cinema</em></h2><p class="sec-desc">Stream in 4K resolution or click the download button on any card to save the asset.</p></div><a href="#vault" class="link-arrow" style="color:var(--accent-light)">Open Media Vault →</a></div>
+    <div class="cinema-grid">
+        <div class="cinema-card reveal" onclick="openLB('morning')">
+            <video id="morningVideo" muted loop playsinline poster="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=700&fit=crop">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-cup-of-coffee-with-beans-around-it-4911-large.mp4" type="video/mp4">
+            </video>
+            <button class="cinema-download-btn" onclick="event.stopPropagation(); triggerDownload('morning')" title="Download this video">⬇️</button>
+            <div class="cinema-card-overlay"><div class="cinema-play">▶</div><div class="cinema-badge">Featured</div><h3>Morning Rituals for Peace</h3><div class="meta"><span>03:15</span><span>24K views</span></div></div>
+        </div>
+        <div class="cinema-card reveal rd1" onclick="openLB('yoga')">
+            <video id="yogaVideo" muted loop playsinline poster="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-doing-yoga-on-a-wooden-floor-41618-large.mp4" type="video/mp4">
+            </video>
+            <button class="cinema-download-btn" onclick="event.stopPropagation(); triggerDownload('yoga')" title="Download this video">⬇️</button>
+            <div class="cinema-card-overlay"><div class="cinema-play">▶</div><h3>Sunrise Yoga Flow</h3><div class="meta"><span>04:40</span><span>18K views</span></div></div>
+        </div>
+        <div class="cinema-card reveal rd2" onclick="openLB('cook')">
+            <video id="cookVideo" muted loop playsinline poster="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-chopping-vegetables-on-a-wooden-board-41639-large.mp4" type="video/mp4">
+            </video>
+            <button class="cinema-download-btn" onclick="event.stopPropagation(); triggerDownload('cook')" title="Download this video">⬇️</button>
+            <div class="cinema-card-overlay"><div class="cinema-play">▶</div><h3>Farm-to-Table Cooking</h3><div class="meta"><span>02:10</span><span>12K views</span></div></div>
+        </div>
+        <div class="cinema-card reveal rd3" onclick="openLB('travel')">
+            <video id="travelVideo" muted loop playsinline poster="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&h=400&fit=crop">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-crashing-on-rocks-from-above-41595-large.mp4" type="video/mp4">
+            </video>
+            <button class="cinema-download-btn" onclick="event.stopPropagation(); triggerDownload('travel')" title="Download this video">⬇️</button>
+            <div class="cinema-card-overlay"><div class="cinema-play">▶</div><h3>Amalfi Coast Secrets</h3><div class="meta"><span>05:30</span><span>31K views</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- 4K MEDIA VAULT (DIRECT DOWNLOAD CENTER) -->
+<section class="vault-section" id="vault">
+    <div class="sec-head-row reveal">
+        <div>
+            <div class="sec-label">Media Vault</div>
+            <h2 class="sec-title">Direct <em>Download</em> Hub</h2>
+            <p class="sec-desc">Save master 4K MP4 lifestyle video files directly to your machine. Free for personal and aesthetic projects.</p>
+        </div>
+        <button class="btn-main" onclick="triggerBatchDownload()">Download Master Bundle (ZIP) ↓</button>
+    </div>
+    <div class="vault-grid">
+        <div class="vault-card reveal">
+            <div class="vault-thumb">
+                <video muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause()">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-meditating-in-nature-31908-large.mp4" type="video/mp4">
+                </video>
+                <div class="vault-res">4K UHD · 60fps</div>
+            </div>
+            <div class="vault-content">
+                <div>
+                    <h4>Mindful Nature Meditation</h4>
+                    <p>Peaceful outdoor retreat visual capture. High dynamic range with neutral color grading.</p>
+                </div>
+                <div>
+                    <div class="vault-meta"><span>Format: MP4</span><span>Size: 18.4 MB</span></div>
+                    <div class="vault-btn-group">
+                        <button class="btn-dl" onclick="triggerDownload('hero')">Download 4K</button>
+                        <button class="btn-dl-sub" onclick="openLB('hero')">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vault-card reveal rd1">
+            <div class="vault-thumb">
+                <video muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause()">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-cup-of-coffee-with-beans-around-it-4911-large.mp4" type="video/mp4">
+                </video>
+                <div class="vault-res">1080p PRO · 60fps</div>
+            </div>
+            <div class="vault-content">
+                <div>
+                    <h4>Artisan Morning Brew</h4>
+                    <p>Macro cinematography of roasted beans and freshly brewed morning pour.</p>
+                </div>
+                <div>
+                    <div class="vault-meta"><span>Format: MP4</span><span>Size: 12.1 MB</span></div>
+                    <div class="vault-btn-group">
+                        <button class="btn-dl" onclick="triggerDownload('morning')">Download 1080p</button>
+                        <button class="btn-dl-sub" onclick="openLB('morning')">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vault-card reveal rd2">
+            <div class="vault-thumb">
+                <video muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause()">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-crashing-on-rocks-from-above-41595-large.mp4" type="video/mp4">
+                </video>
+                <div class="vault-res">4K Cinema · 24fps</div>
+            </div>
+            <div class="vault-content">
+                <div>
+                    <h4>Amalfi Coastal Waves</h4>
+                    <p>Aerial drone footage of turquoise tides meeting rugged Mediterranean cliffs.</p>
+                </div>
+                <div>
+                    <div class="vault-meta"><span>Format: MP4</span><span>Size: 22.8 MB</span></div>
+                    <div class="vault-btn-group">
+                        <button class="btn-dl" onclick="triggerDownload('travel')">Download 4K</button>
+                        <button class="btn-dl-sub" onclick="openLB('travel')">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Lightbox with Download Option -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLB()">✕</button>
+    <div class="lightbox-player" id="lbPlayer"></div>
+    <div class="lightbox-controls-bar">
+        <div class="lightbox-info">
+            <h3 id="lbTitle">Video Title</h3>
+            <p id="lbMeta">00:00 · Metadata</p>
+        </div>
+        <button class="lightbox-download-action" id="lbDownloadBtn">⬇️ Download Video File</button>
+    </div>
+</div>
+
+<!-- 3D Product Viewer -->
+<section class="product-3d">
+    <div class="product-3d-grid">
+        <div class="product-viewer reveal">
+            <div class="product-turntable" id="productTurntable">
+                <div class="product-turntable-img" id="productImg"><img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=800&fit=crop" alt="Product"></div>
+                <div class="product-hotspot product-hotspot-1"><div class="product-tooltip" style="top:-80px;left:30px"><h5>Organic Formula</h5><p>Made with 97% natural ingredients</p></div></div>
+                <div class="product-hotspot product-hotspot-2"><div class="product-tooltip" style="top:-80px;left:-220px"><h5>Eco Packaging</h5><p>100% recyclable glass bottle</p></div></div>
+                <div class="product-hotspot product-hotspot-3"><div class="product-tooltip" style="top:-80px;left:30px"><h5>Cruelty Free</h5><p>Never tested on animals</p></div></div>
+            </div>
+            <div class="product-rotate-hint"><span class="rotate-icon">🔄</span> Drag to rotate in 3D</div>
+        </div>
+        <div class="product-info reveal rd2">
+            <div class="sec-label">Featured Product</div>
+            <h2>The <em>Essential</em> Serum Collection</h2>
+            <p>Our signature botanical serum blends ancient wisdom with modern science. Each drop delivers concentrated plant intelligence to transform your skin ritual into a moment of pure luxury.</p>
+            <div class="product-features">
+                <div class="product-feature"><span class="product-feature-icon">🌿</span><span>100% Organic</span></div>
+                <div class="product-feature"><span class="product-feature-icon">💧</span><span>Deep Hydration</span></div>
+                <div class="product-feature"><span class="product-feature-icon">🧬</span><span>Anti-Aging</span></div>
+                <div class="product-feature"><span class="product-feature-icon">♻️</span><span>Sustainable</span></div>
+            </div>
+            <a href="#" class="btn-main">Shop Now — $68 →</a>
+        </div>
+    </div>
+</section>
+
+<!-- Articles -->
+<section class="articles-section" id="articles">
+    <div class="sec-head-row reveal"><div><div class="sec-label">Read</div><h2 class="sec-title">Fresh <em>stories</em></h2></div><a class="link-arrow">All Stories →</a></div>
+    <div class="articles-tabs">
+        <button class="a-tab active" data-tab="all">All</button><button class="a-tab" data-tab="wellness">Wellness</button><button class="a-tab" data-tab="food">Food</button><button class="a-tab" data-tab="travel">Travel</button>
+    </div>
+    <div class="articles-grid">
+        <div class="a-card tilt reveal" data-cat="wellness"><div class="a-card-img"><img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600&h=400&fit=crop" alt=""><div class="a-card-label">Wellness</div></div><div class="a-card-body"><div class="a-card-date">Dec 14, 2024</div><h3>Morning Rituals That Transform Your Day</h3><p>Science-backed habits from meditation to cold exposure for peak performance and inner calm.</p></div><div class="a-card-foot"><div class="a-card-author"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop" alt="">Sarah M.</div><span class="time">6 min</span></div></div>
+        <div class="a-card tilt reveal rd1" data-cat="food"><div class="a-card-img"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=400&fit=crop" alt=""><div class="a-card-label">Food</div></div><div class="a-card-body"><div class="a-card-date">Dec 12, 2024</div><h3>Plant-Based Meals That Satisfy</h3><p>Hearty recipes proving plant-based eating is indulgent, satisfying, and delicious.</p></div><div class="a-card-foot"><div class="a-card-author"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop" alt="">James K.</div><span class="time">5 min</span></div></div>
+        <div class="a-card tilt reveal rd2" data-cat="travel"><div class="a-card-img"><img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&h=400&fit=crop" alt=""><div class="a-card-label">Travel</div></div><div class="a-card-body"><div class="a-card-date">Dec 10, 2024</div><h3>10 Underrated European Gems</h3><p>Skip tourist traps and explore Europe's best-kept secrets from coast to mountain.</p></div><div class="a-card-foot"><div class="a-card-author"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop" alt="">Elena V.</div><span class="time">9 min</span></div></div>
+    </div>
+</section>
+
+<!-- Podcast & Sound -->
+<section class="sound-section" id="sound">
+    <div class="sec-head reveal" style="text-align:center"><div class="sec-label" style="justify-content:center">Listen</div><h2 class="sec-title">Podcast & <em>Soundscapes</em></h2><p class="sec-desc">Conversations, guided meditations, and ambient soundscapes for focus and calm.</p></div>
+    <div class="sound-grid">
+        <div class="podcast-main reveal">
+            <div class="podcast-cover"><img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&h=400&fit=crop" alt=""><div class="podcast-new">New Episode</div></div>
+            <div class="podcast-content"><h3>The Art of Intentional Living</h3><p>A deep conversation about designing your life with purpose and authenticity.</p>
+                <div class="player"><button class="player-btn" id="podBtn" onclick="togglePod()">▶</button><div class="player-info"><div class="player-title">Ep. 47 — Intentional Living</div><div class="player-bar" onclick="seekPod(event)"><div class="player-bar-fill" id="podBar"></div></div><div class="player-time"><span id="podTime">0:00</span><span>42:15</span></div></div><div class="player-dur">42:15</div></div>
+            </div>
+            <div class="soundscapes-wrap"><h4>✨ Ambient Soundscapes</h4>
+                <div class="snd-grid">
+                    <div class="snd-btn" onclick="playSound(this,'rain')"><span class="snd-icon">🌧️</span><div class="snd-name">Rain</div></div>
+                    <div class="snd-btn" onclick="playSound(this,'forest')"><span class="snd-icon">🌲</span><div class="snd-name">Forest</div></div>
+                    <div class="snd-btn" onclick="playSound(this,'ocean')"><span class="snd-icon">🌊</span><div class="snd-name">Ocean</div></div>
+                    <div class="snd-btn" onclick="playSound(this,'fire')"><span class="snd-icon">🔥</span><div class="snd-name">Fire</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="pod-list reveal rd2">
+            <div class="pod-item" onclick="togglePod()"><div class="pod-item-cover"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=120&h=120&fit=crop" alt=""></div><div class="pod-item-info"><h4>Morning Meditation</h4><p>Ep. 46</p></div><div class="pod-item-time">28:30</div><button class="pod-item-play">▶</button></div>
+            <div class="pod-item" onclick="togglePod()"><div class="pod-item-cover"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=120&h=120&fit=crop" alt=""></div><div class="pod-item-info"><h4>Mindful Eating</h4><p>Ep. 45</p></div><div class="pod-item-time">35:12</div><button class="pod-item-play">▶</button></div>
+            <div class="pod-item" onclick="togglePod()"><div class="pod-item-cover"><img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=120&h=120&fit=crop" alt=""></div><div class="pod-item-info"><h4>Travel as Therapy</h4><p>Ep. 44</p></div><div class="pod-item-time">41:50</div><button class="pod-item-play">▶</button></div>
+            <div class="pod-item" onclick="togglePod()"><div class="pod-item-cover"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=120&h=120&fit=crop" alt=""></div><div class="pod-item-info"><h4>Sleep Science</h4><p>Ep. 43</p></div><div class="pod-item-time">38:22</div><button class="pod-item-play">▶</button></div>
+            <div class="pod-item" onclick="togglePod()"><div class="pod-item-cover"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=120&h=120&fit=crop" alt=""></div><div class="pod-item-info"><h4>Capsule Wardrobe</h4><p>Ep. 42</p></div><div class="pod-item-time">25:44</div><button class="pod-item-play">▶</button></div>
+        </div>
+    </div>
+</section>
+
+<!-- 3D Wellness Flip -->
+<section class="wellness-section" id="wellness">
+    <div class="sec-head reveal" style="text-align:center"><div class="sec-label" style="justify-content:center">Mind & Body</div><h2 class="sec-title">Wellness <em>Hub</em></h2><p class="sec-desc" style="margin:0 auto">Hover each card to reveal insights.</p></div>
+    <div class="well-grid">
+        <div class="well-flip reveal"><div class="well-flip-inner"><div class="well-f"><div class="well-icon">🧠</div><h3>Mental Clarity</h3><p>Meditation and mindfulness practices.</p><div class="well-hint">↻ Hover to flip</div></div><div class="well-b"><h3>Mental Clarity</h3><p>Guided meditations for peace and focus.</p><div class="well-b-num">12</div><div class="well-b-label">Sessions</div></div></div></div>
+        <div class="well-flip reveal rd1"><div class="well-flip-inner"><div class="well-f"><div class="well-icon">💪</div><h3>Movement</h3><p>Yoga flows and workouts for every level.</p><div class="well-hint">↻ Hover to flip</div></div><div class="well-b"><h3>Movement</h3><p>Gentle yoga to HIIT — find your flow.</p><div class="well-b-num">30+</div><div class="well-b-label">Workouts</div></div></div></div>
+        <div class="well-flip reveal rd2"><div class="well-flip-inner"><div class="well-f"><div class="well-icon">😴</div><h3>Rest</h3><p>Sleep hygiene and relaxation techniques.</p><div class="well-hint">↻ Hover to flip</div></div><div class="well-b"><h3>Rest</h3><p>Master your sleep architecture.</p><div class="well-b-num">8hr</div><div class="well-b-label">Optimal Sleep</div></div></div></div>
+    </div>
+</section>
+
+<!-- Ambient Experience -->
+<section class="ambient">
+    <canvas id="ambientCanvas"></canvas>
+    <div class="ambient-vis reveal"><div class="amb-ring"></div><div class="amb-ring"></div><div class="amb-ring"></div><div class="amb-ring"></div><button class="amb-btn" id="ambBtn" onclick="toggleAmb()">▶</button></div>
+    <div class="amb-title reveal">Immersive Sound Experience</div>
+    <div class="amb-desc reveal">Close your eyes. Choose a mood. Let sound transform your state.</div>
+    <div class="amb-moods reveal">
+        <button class="amb-mood active" onclick="setMood(this)">🎯 Focus</button>
+        <button class="amb-mood" onclick="setMood(this)">🧘 Calm</button>
+        <button class="amb-mood" onclick="setMood(this)">🌙 Sleep</button>
+        <button class="amb-mood" onclick="setMood(this)">🌿 Nature</button>
+        <button class="amb-mood" onclick="setMood(this)">🎨 Creative</button>
+    </div>
+</section>
+
+<!-- 3D Globe Travel -->
+<section class="globe-section" id="globe">
+    <div class="globe-layout">
+        <div class="globe-container reveal">
+            <canvas id="globeCanvas"></canvas>
+            <div class="globe-pin" style="top:30%;left:40%"></div>
+            <div class="globe-pin" style="top:45%;left:65%"></div>
+            <div class="globe-pin" style="top:60%;left:35%"></div>
+            <div class="globe-pin" style="top:25%;left:60%"></div>
+        </div>
+        <div class="reveal rd2">
+            <div class="sec-label">Wander</div>
+            <h2 class="sec-title">Travel <em>the World</em></h2>
+            <p class="sec-desc" style="margin-bottom:30px">Explore destinations on our interactive 3D globe.</p>
+            <div class="globe-destinations">
+                <div class="globe-dest"><div class="globe-dest-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=140&h=140&fit=crop" alt=""></div><div class="globe-dest-info"><h4>Swiss Alps</h4><p>Winter wonderland adventure guide</p><div class="dest-meta"><span>📸 24 photos</span><span>🎬 3 films</span></div></div></div>
+                <div class="globe-dest"><div class="globe-dest-img"><img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=140&h=140&fit=crop" alt=""></div><div class="globe-dest-info"><h4>Santorini</h4><p>Sunsets, cuisine & serenity</p><div class="dest-meta"><span>📸 18 photos</span><span>🎬 2 films</span></div></div></div>
+                <div class="globe-dest"><div class="globe-dest-img"><img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=140&h=140&fit=crop" alt=""></div><div class="globe-dest-info"><h4>Kyoto</h4><p>Ancient temples & zen gardens</p><div class="dest-meta"><span>📸 32 photos</span><span>🎬 4 films</span></div></div></div>
+                <div class="globe-dest"><div class="globe-dest-img"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=140&h=140&fit=crop" alt=""></div><div class="globe-dest-info"><h4>Bali</h4><p>Tropical paradise & yoga retreats</p><div class="dest-meta"><span>📸 28 photos</span><span>🎬 5 films</span></div></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3D Quote Cube -->
+<section class="quote">
+    <div class="sec-label reveal">Daily Wisdom</div>
+    <div class="cube-wrap reveal"><div class="cube"><div class="cube-f fr">🌿</div><div class="cube-f bk">🧘</div><div class="cube-f rt">✨</div><div class="cube-f lt">🌊</div><div class="cube-f tp">☀️</div><div class="cube-f bt">🌙</div></div></div>
+    <div class="quote-text reveal" id="qText">"The greatest wealth is to live content with little."</div>
+    <div class="quote-author reveal" id="qAuthor">— Plato</div>
+</section>
+
+<!-- Recipes -->
+<section class="recipes-section" id="recipes">
+    <div class="sec-head-row reveal"><div><div class="sec-label">Nourish</div><h2 class="sec-title">Wholesome <em>Recipes</em></h2></div><a class="link-arrow">All Recipes →</a></div>
+    <div class="rec-scroll">
+        <div class="rec-card reveal"><div class="rec-card-img"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop" alt=""><div class="rec-card-time">⏱ 10min</div></div><div class="rec-body"><div class="rec-tags"><span>Breakfast</span><span>Vegan</span></div><h3>Golden Turmeric Bowl</h3><p>Anti-inflammatory and topped with crunchy granola.</p></div><div class="rec-foot"><span>🔥 280 cal</span><button class="rec-save" onclick="this.classList.toggle('saved')">♡</button></div></div>
+        <div class="rec-card reveal"><div class="rec-card-img"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=400&fit=crop" alt=""><div class="rec-card-time">⏱ 25min</div></div><div class="rec-body"><div class="rec-tags"><span>Lunch</span><span>Protein</span></div><h3>Mediterranean Quinoa</h3><p>Fresh, colorful, and packed with nutrients.</p></div><div class="rec-foot"><span>🔥 420 cal</span><button class="rec-save" onclick="this.classList.toggle('saved')">♡</button></div></div>
+        <div class="rec-card reveal"><div class="rec-card-img"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" alt=""><div class="rec-card-time">⏱ 20min</div></div><div class="rec-body"><div class="rec-tags"><span>Dinner</span></div><h3>Lemon Herb Pasta</h3><p>Restaurant-quality in under 20 minutes.</p></div><div class="rec-foot"><span>🔥 480 cal</span><button class="rec-save" onclick="this.classList.toggle('saved')">♡</button></div></div>
+        <div class="rec-card reveal"><div class="rec-card-img"><img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&h=400&fit=crop" alt=""><div class="rec-card-time">⏱ 15min</div></div><div class="rec-body"><div class="rec-tags"><span>Dessert</span><span>Raw</span></div><h3>Avocado Chocolate Mousse</h3><p>Rich, silky, completely guilt-free.</p></div><div class="rec-foot"><span>🔥 220 cal</span><button class="rec-save" onclick="this.classList.toggle('saved')">♡</button></div></div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="news-section" id="newsletter">
+    <div class="sec-head reveal" style="text-align:center"><div class="sec-label" style="justify-content:center">Join</div><h2 class="sec-title">Never miss a <em>moment</em></h2><p class="sec-desc" style="margin:0 auto">Weekly stories, recipes, playlists & exclusive films.</p></div>
+    <div class="news-box reveal">
+        <form class="news-form" id="newsForm"><input type="email" placeholder="Your email address" required id="newsEmail"><button type="submit">Subscribe</button></form>
+        <div class="news-note">Join 15,000+ readers. Unsubscribe anytime.</div>
+        <div class="news-ok" id="newsOk">🎉 Welcome! Check your inbox.</div>
+    </div>
+</section>
+
+<!-- Instagram -->
+<section class="insta-section">
+    <div class="sec-head reveal" style="text-align:center"><div class="sec-label" style="justify-content:center">@vivara.lifestyle</div><h2 class="sec-title">Follow <em>along</em></h2></div>
+    <div class="insta-grid">
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop" alt=""><div class="insta-over">♡ 2.4k</div></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop" alt=""><div class="insta-over">♡ 3.1k</div></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop" alt=""><div class="insta-over">♡ 1.8k</div></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=400&fit=crop" alt=""><div class="insta-over">♡ 4.2k</div></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=400&fit=crop" alt=""><div class="insta-over">♡ 2.7k</div></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=400&fit=crop" alt=""><div class="insta-over">♡ 3.5k</div></div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="foot-top">
+        <div class="foot-brand"><a href="#" class="nav-logo">VIVARA<span>.</span></a><p>Curating a beautiful life through stories, sounds, and immersive visuals.</p><div class="socials"><a href="#">📷</a><a href="#">▶️</a><a href="#">📌</a><a href="#">🎵</a></div></div>
+        <div class="foot-col"><h4>Explore</h4><a href="#">Wellness</a><a href="#">Nutrition</a><a href="#">Travel</a><a href="#">Style</a><a href="#">Films</a></div>
+        <div class="foot-col"><h4>Listen</h4><a href="#">Podcast</a><a href="#">Soundscapes</a><a href="#">Playlists</a><a href="#">Meditations</a></div>
+        <div class="foot-col"><h4>Company</h4><a href="#">About</a><a href="#">Careers</a><a href="#">Contact</a><a href="#">Press</a></div>
+    </div>
+    <div class="foot-bottom"><p>© 2024 Vivara Lifestyle. All rights reserved.</p><div class="foot-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div></div>
+</footer>
+
+<button class="btt" id="btt">↑</button>
+
+<script>
+/* === VIDEO ASSETS & METADATA === */
+const videoLibrary = {
+    hero: {
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-woman-meditating-in-nature-31908-large.mp4',
+        filename: 'Vivara-Nature-Meditation-4K.mp4',
+        title: 'Welcome to Vivara — 4K Film',
+        meta: '02:40 · 4K UHD Master Cut'
+    },
+    morning: {
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-cup-of-coffee-with-beans-around-it-4911-large.mp4',
+        filename: 'Vivara-Morning-Rituals-1080p.mp4',
+        title: 'Morning Rituals for Inner Peace',
+        meta: '03:15 · 1080p 60fps'
+    },
+    yoga: {
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-woman-doing-yoga-on-a-wooden-floor-41618-large.mp4',
+        filename: 'Vivara-Sunrise-Yoga-Flow.mp4',
+        title: 'Sunrise Yoga Flow',
+        meta: '04:40 · 1080p Pro'
+    },
+    cook: {
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-chopping-vegetables-on-a-wooden-board-41639-large.mp4',
+        filename: 'Vivara-Farm-To-Table-Cooking.mp4',
+        title: 'Farm-to-Table Cooking',
+        meta: '02:10 · 1080p'
+    },
+    travel: {
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-waves-crashing-on-rocks-from-above-41595-large.mp4',
+        filename: 'Vivara-Amalfi-Coast-Drone-4K.mp4',
+        title: 'Amalfi Coast Hidden Gems',
+        meta: '05:30 · 4K Cinema Drone'
+    }
+};
+
+/* === PROGRAMMATIC DIRECT DOWNLOAD ENGINE === */
+function triggerDownload(videoId) {
+    const video = videoLibrary[videoId];
+    if (!video) return;
+
+    const toast = document.getElementById('dlToast');
+    const toastName = document.getElementById('dlToastName');
+    const toastPct = document.getElementById('dlToastPct');
+    const toastFill = document.getElementById('dlToastFill');
+    const toastStatus = document.getElementById('dlToastStatus');
+
+    toastName.textContent = video.filename;
+    toast.classList.add('active');
+    toastPct.textContent = '0%';
+    toastFill.style.width = '0%';
+    toastStatus.textContent = 'Fetching 4K video stream...';
+
+    // Simulate real-time progress for immediate user feedback
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.floor(Math.random() * 20) + 10;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(progressInterval);
+            toastPct.textContent = '100%';
+            toastFill.style.width = '100%';
+            toastStatus.textContent = 'Download starting... Saved to your device!';
+
+            // Download using fetch & blob to ensure direct file saving
+            fetch(video.url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = blobUrl;
+                    a.download = video.filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(blobUrl);
+                    a.remove();
+                })
+                .catch(() => {
+                    // Fallback to direct anchor download trigger
+                    const directLink = document.createElement('a');
+                    directLink.href = video.url;
+                    directLink.download = video.filename;
+                    directLink.target = '_blank';
+                    document.body.appendChild(directLink);
+                    directLink.click();
+                    directLink.remove();
+                });
+
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3500);
+        } else {
+            toastPct.textContent = progress + '%';
+            toastFill.style.width = progress + '%';
+        }
+    }, 150);
+}
+
+function triggerBatchDownload() {
+    triggerDownload('hero');
+    setTimeout(() => triggerDownload('travel'), 800);
+}
+
+/* === AUTO-PLAY AND VIDEO RECOVERY ENGINE === */
+const videoElements = document.querySelectorAll('video');
+
+function initializeVideos() {
+    videoElements.forEach(video => {
+        video.muted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                const startOnInteraction = () => {
+                    video.play().then(() => {
+                        document.removeEventListener('click', startOnInteraction);
+                        document.removeEventListener('touchstart', startOnInteraction);
+                    });
+                };
+                document.addEventListener('click', startOnInteraction);
+                document.addEventListener('touchstart', startOnInteraction);
+            });
+        }
+    });
+}
+
+document.querySelectorAll('.cinema-card').forEach(card => {
+    const video = card.querySelector('video');
+    if(video) {
+        card.addEventListener('mouseenter', () => {
+            video.play().catch(() => {});
+        });
+        card.addEventListener('mouseleave', () => {
+            video.pause();
+            video.currentTime = 0;
+        });
+    }
+});
+
+/* === PRELOADER === */
+let loadPct=0;
+const pBar=document.getElementById('preloaderBar'),pPct=document.getElementById('preloaderPct');
+const loadInterval=setInterval(()=>{
+    loadPct+=Math.random()*15;
+    if(loadPct>=100){
+        loadPct=100;
+        clearInterval(loadInterval);
+        setTimeout(()=>{
+            document.getElementById('preloader').classList.add('loaded');
+            initializeVideos();
+        },400)
+    }
+    pBar.style.width=loadPct+'%';
+    pPct.textContent=Math.floor(loadPct)+'%';
+},120);
+
+/* === CUSTOM CURSOR === */
+const cursor=document.getElementById('cursor'),cDot=cursor.querySelector('.cursor-dot'),cRing=cursor.querySelector('.cursor-ring'),cText=cursor.querySelector('.cursor-text');
+let cx=0,cy=0,mx=0,my=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function cursorLoop(){cx+=(mx-cx)*.12;cy+=(my-cy)*.12;cDot.style.left=mx+'px';cDot.style.top=my+'px';cRing.style.left=cx+'px';cRing.style.top=cy+'px';cText.style.left=cx+'px';cText.style.top=cy+'px';requestAnimationFrame(cursorLoop)})();
+document.querySelectorAll('a,button,.cat-3d-card,.a-card,.cinema-card,.rec-card,.globe-dest,.pod-item,.well-flip,.snd-btn,.insta-item').forEach(el=>{el.addEventListener('mouseenter',()=>cursor.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>{cursor.classList.remove('cursor-hover');cursor.classList.remove('cursor-view')})});
+document.querySelectorAll('.cinema-card,.cat-3d-card,.a-card,.insta-item,.vault-thumb').forEach(el=>{el.addEventListener('mouseenter',()=>cursor.classList.add('cursor-view'));el.addEventListener('mouseleave',()=>cursor.classList.remove('cursor-view'))});
+
+/* === NAV === */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>60);document.getElementById('readBar').style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%'});
+const hamburger=document.getElementById('hamburger'),mn=document.getElementById('mobileNav');
+hamburger.addEventListener('click',()=>{hamburger.classList.toggle('active');mn.classList.toggle('active');document.body.style.overflow=mn.classList.contains('active')?'hidden':''});
+function closeNav(){hamburger.classList.remove('active');mn.classList.remove('active');document.body.style.overflow=''}
+
+/* === BACK TO TOP === */
+const btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>btt.classList.toggle('show',scrollY>500));
+btt.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
+/* === HERO CANVAS PARTICLES === */
+(function(){const c=document.getElementById('heroCanvas'),ctx=c.getContext('2d');let w,h,particles=[];
+function resize(){w=c.width=c.offsetWidth;h=c.height=c.offsetHeight}resize();window.addEventListener('resize',resize);
+for(let i=0;i<60;i++)particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+.5,dx:(Math.random()-.5)*.3,dy:(Math.random()-.5)*.3,o:Math.random()*.3+.1});
+function draw(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{p.x+=p.dx;p.y+=p.dy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(201,169,110,${p.o})`;ctx.fill()});
+particles.forEach((a,i)=>{particles.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(201,169,110,${.05*(1-d/120)})`;ctx.stroke()}})});
+requestAnimationFrame(draw)}draw()})();
+
+/* === AMBIENT CANVAS === */
+(function(){const c=document.getElementById('ambientCanvas'),ctx=c.getContext('2d');let w,h;
+function resize(){w=c.width=c.offsetWidth;h=c.height=c.offsetHeight}resize();window.addEventListener('resize',resize);
+let t=0;function draw(){ctx.clearRect(0,0,w,h);t+=.005;
+for(let i=0;i<5;i++){ctx.beginPath();for(let x=0;x<w;x++){const y=h/2+Math.sin(x*.003+t+i*.8)*80*Math.sin(t*.5+i)+Math.cos(x*.005+t*1.5)*40;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.strokeStyle=`rgba(201,169,110,${.03+i*.01})`;ctx.lineWidth=1;ctx.stroke()}
+requestAnimationFrame(draw)}draw()})();
+
+/* === 3D GLOBE CANVAS === */
+(function(){const c=document.getElementById('globeCanvas'),ctx=c.getContext('2d');let w,h;
+function resize(){w=c.width=c.offsetWidth;h=c.height=c.offsetHeight}resize();window.addEventListener('resize',resize);
+let rot=0;function draw(){ctx.clearRect(0,0,w,h);const cx=w/2,cy=h/2,r=Math.min(w,h)*.4;rot+=.003;
+ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle='rgba(201,169,110,.03)';ctx.fill();ctx.strokeStyle='rgba(201,169,110,.08)';ctx.lineWidth=1;ctx.stroke();
+for(let i=0;i<8;i++){const angle=i*Math.PI/4+rot;ctx.beginPath();ctx.ellipse(cx,cy,r,r*Math.abs(Math.cos(angle)),0,0,Math.PI*2);ctx.strokeStyle=`rgba(201,169,110,${.04+Math.abs(Math.cos(angle))*.06})`;ctx.stroke()}
+for(let i=0;i<6;i++){const y=cy-r+i*(2*r/5);const rr=Math.sqrt(r*r-Math.pow(y-cy,2));if(rr>0){ctx.beginPath();ctx.ellipse(cx,y,rr,rr*.15,0,0,Math.PI*2);ctx.strokeStyle='rgba(201,169,110,.04)';ctx.stroke()}}
+for(let i=0;i<20;i++){const lat=(Math.random()-.5)*Math.PI;const lon=Math.random()*Math.PI*2+rot*2;const x=cx+r*.85*Math.cos(lat)*Math.sin(lon);const y=cy+r*.85*Math.sin(lat);const z=Math.cos(lat)*Math.cos(lon);if(z>0){ctx.beginPath();ctx.arc(x,y,1.5,0,Math.PI*2);ctx.fillStyle=`rgba(201,169,110,${.1+z*.3})`;ctx.fill()}}
+requestAnimationFrame(draw)}draw()})();
+
+/* === REVEAL === */
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* === COUNTER === */
+function animNum(el){const t=+el.dataset.target,d=2000,s=performance.now();const step=n=>{const p=Math.min((n-s)/d,1);el.textContent=Math.floor((1-Math.pow(1-p,3))*t)+(t>=100?'+':'');if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+const cObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){animNum(e.target);cObs.unobserve(e.target)}})},{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el=>cObs.observe(el));
+
+/* === 3D TILT === */
+document.querySelectorAll('.tilt').forEach(card=>{
+    card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(800px) rotateY(${x*15}deg) rotateX(${-y*15}deg) scale(1.02)`});
+    card.addEventListener('mouseleave',()=>{card.style.transform='';card.style.transition='transform .5s ease'});
+    card.addEventListener('mouseenter',()=>{card.style.transition='transform .1s ease'})
+});
+
+/* === 3D HERO MOUSE === */
+const hero3d=document.getElementById('hero3dObj');
+document.querySelector('.hero').addEventListener('mousemove',e=>{if(!hero3d)return;const x=(e.clientX/innerWidth-.5)*20;const y=(e.clientY/innerHeight-.5)*15;hero3d.style.transform=`translateY(${-15+Math.sin(Date.now()*.001)*5}px) rotateY(${x}deg) rotateX(${-y}deg)`});
+
+/* === 3D PRODUCT ROTATE === */
+const pTurntable=document.getElementById('productTurntable'),pImg=document.getElementById('productImg');
+let dragging=false,startX=0,rotX=0,currentRot=0;
+pTurntable.addEventListener('mousedown',e=>{dragging=true;startX=e.clientX;pTurntable.style.cursor='grabbing'});
+window.addEventListener('mousemove',e=>{if(!dragging)return;const dx=e.clientX-startX;currentRot=rotX+dx*.3;pImg.style.transform=`rotateY(${currentRot}deg)`});
+window.addEventListener('mouseup',()=>{if(dragging){dragging=false;rotX=currentRot;pTurntable.style.cursor='grab'}});
+
+/* === TABS === */
+document.querySelectorAll('.a-tab').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.a-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const tab=btn.dataset.tab;document.querySelectorAll('.a-card').forEach(c=>{if(tab==='all'||c.dataset.cat===tab){c.style.display='';setTimeout(()=>{c.style.opacity='1';c.style.transform=''},50)}else{c.style.opacity='0';setTimeout(()=>c.style.display='none',400)}})})});
+
+/* === MUSIC === */
+const bgAudio=document.getElementById('bgAudio'),mBtn=document.getElementById('musicBtn'),mEq=document.getElementById('musicEq');
+bgAudio.volume=.25;let mPlaying=false;
+mBtn.addEventListener('click',()=>{if(mPlaying){bgAudio.pause();mBtn.textContent='▶';mBtn.classList.remove('playing');mEq.classList.remove('on')}else{bgAudio.play().catch(()=>{});mBtn.textContent='⏸';mBtn.classList.add('playing');mEq.classList.add('on')}mPlaying=!mPlaying});
+
+/* === AMBIENT === */
+const ambAudio=document.getElementById('ambAudio'),ambBtn=document.getElementById('ambBtn');
+ambAudio.volume=.35;let ambOn=false;
+function toggleAmb(){if(ambOn){ambAudio.pause();ambBtn.textContent='▶';ambBtn.classList.remove('on')}else{ambAudio.play().catch(()=>{});ambBtn.textContent='⏸';ambBtn.classList.add('on')}ambOn=!ambOn}
+function setMood(btn){document.querySelectorAll('.amb-mood').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(!ambOn)toggleAmb()}
+
+/* === SOUNDSCAPES === */
+const sounds={rain:new Audio('https://cdn.pixabay.com/audio/2022/10/30/audio_a583b1f2ae.mp3'),forest:new Audio('https://cdn.pixabay.com/audio/2022/08/31/audio_419263ef84.mp3'),ocean:new Audio('https://cdn.pixabay.com/audio/2022/06/07/audio_b9bd4170e4.mp3'),fire:new Audio('https://cdn.pixabay.com/audio/2024/06/05/audio_48e906fdc4.mp3')};
+Object.values(sounds).forEach(a=>{a.loop=true;a.volume=.25});let curSound=null;
+function playSound(btn,s){document.querySelectorAll('.snd-btn').forEach(b=>b.classList.remove('active'));if(curSound===s){sounds[s].pause();sounds[s].currentTime=0;curSound=null;return}Object.values(sounds).forEach(a=>{a.pause();a.currentTime=0});sounds[s].play().catch(()=>{});btn.classList.add('active');curSound=s}
+
+/* === PODCAST === */
+const podAudio=new Audio('https://cdn.pixabay.com/audio/2024/11/28/audio_3a6a28e498.mp3');
+podAudio.volume=.5;let podOn=false;const podBtn=document.getElementById('podBtn'),podBar=document.getElementById('podBar'),podTime=document.getElementById('podTime');
+function togglePod(){if(podOn){podAudio.pause();podBtn.textContent='▶'}else{podAudio.play().catch(()=>{});podBtn.textContent='⏸'}podOn=!podOn}
+podAudio.addEventListener('timeupdate',()=>{if(podAudio.duration){podBar.style.width=(podAudio.currentTime/podAudio.duration*100)+'%';const m=Math.floor(podAudio.currentTime/60),s=Math.floor(podAudio.currentTime%60);podTime.textContent=m+':'+(s<10?'0':'')+s}});
+function seekPod(e){const r=e.currentTarget.getBoundingClientRect();podAudio.currentTime=(e.clientX-r.left)/r.width*podAudio.duration}
+
+/* === LIGHTBOX WITH DOWNLOAD INTEGRATION === */
+function openLB(id){
+    const v = videoLibrary[id];
+    if(!v) return;
+    const lb = document.getElementById('lightbox');
+    document.getElementById('lbPlayer').innerHTML=`<video controls autoplay style="width:100%;height:100%"><source src="${v.url}" type="video/mp4"></video>`;
+    document.getElementById('lbTitle').textContent = v.title;
+    document.getElementById('lbMeta').textContent = v.meta;
+    
+    // Bind current video to download button in lightbox
+    const dlBtn = document.getElementById('lbDownloadBtn');
+    dlBtn.onclick = () => triggerDownload(id);
+
+    lb.classList.add('active');
+    document.body.style.overflow='hidden';
+}
+
+function closeLB(){
+    const lb=document.getElementById('lightbox');
+    lb.classList.remove('active');
+    setTimeout(()=>document.getElementById('lbPlayer').innerHTML='',400);
+    document.body.style.overflow='';
+}
+document.getElementById('lightbox').addEventListener('click',e=>{if(e.target===document.getElementById('lightbox'))closeLB()});
+
+/* === NEWSLETTER === */
+document.getElementById('newsForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('newsOk').style.display='block';document.getElementById('newsEmail').value='';setTimeout(()=>document.getElementById('newsOk').style.display='none',5000)});
+
+/* === QUOTE === */
+const quotes=[{t:'"The greatest wealth is to live content with little."',a:'— Plato'},{t:'"Almost everything will work again if you unplug it for a few minutes, including you."',a:'— Anne Lamott'},{t:'"Take care of your body. It\'s the only place you have to live."',a:'— Jim Rohn'},{t:'"Simplicity is the ultimate sophistication."',a:'— Leonardo da Vinci'},{t:'"Your calm mind is the ultimate weapon against your challenges."',a:'— Bryant McGill'},{t:'"The soul always knows what to do to heal itself."',a:'— Caroline Myss'},{t:'"In the middle of difficulty lies opportunity."',a:'— Albert Einstein'}];
+const q=quotes[new Date().getDay()%quotes.length];document.getElementById('qText').textContent=q.t;document.getElementById('qAuthor').textContent=q.a;
+
+/* === PARALLAX === */
+window.addEventListener('scroll',()=>{const hero=document.querySelector('.hero-text');if(scrollY<innerHeight){hero.style.transform=`translateY(${scrollY*.2}px)`;hero.style.opacity=1-scrollY/innerHeight}});
+
+/* === ESC KEY === */
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLB();closeNav()}});
+</script>
+</body>
+</html>
